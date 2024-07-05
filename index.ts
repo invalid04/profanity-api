@@ -13,6 +13,8 @@ type Environment = {
 
 app.use(cors())
 
+const WHITELIST = ['swear']
+
 app.post('/', async (c) => {
     if (c.req.header('Content-Type') !== 'application/json') {
         return c.json({ error: 'JSON body expected' }, { status: 406 })
@@ -38,7 +40,7 @@ app.post('/', async (c) => {
             return c.json({error: "Message is too long"}, { status: 413 })
         }
 
-        
+
 
     } catch (err) {
 
