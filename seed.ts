@@ -43,6 +43,8 @@ const seed = async () => {
             id: i + batchIndex,
             metadata: { text: row.text }
         }))
+
+        await index.upsert(formatted)
     }
 }
 
