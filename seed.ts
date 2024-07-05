@@ -22,3 +22,10 @@ async function parseCSV(filePath: string): Promise<Row[]> {
             })
     })
 }
+
+const seed = async () => {
+    const data = await parseCSV("training-data.csv")
+    
+}
+
+seed()
