@@ -1,9 +1,17 @@
 import fs from 'fs'
 import csv from 'csv-parser'
 
+
+import { Index } from "@upstash/vector"
+
 interface Row {
     text: string
 }
+
+const index = new Index({
+  url: "https://enabling-troll-17732-us1-vector.upstash.io",
+  token: "ABgFMGVuYWJsaW5nLXRyb2xsLTE3NzMyLXVzMWFkbWluTURZeE1EYzRNVEF0TlRKbE5pMDBZemxpTFRrNFl6TXRaVEl4T0daaU1XWXdNVGRr",
+})
 
 async function parseCSV(filePath: string): Promise<Row[]> {
     return new Promise((resolve, reject) => {
