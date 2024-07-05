@@ -27,7 +27,19 @@ app.post('/', async (c) => {
             cache: false,
         })
 
+        const body = await c.req.json()
+        let { message } = body as {message: string}
+
+        if (!message) {
+            return c.json({error: "message is required"}, { status: 400 })
+        }
+
+        if (message.length > 1000) {
+            return c.json({error: "Message is too long"}, { status: 413 })
+        }
+
         
+
     } catch (err) {
 
     }
