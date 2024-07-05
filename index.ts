@@ -40,7 +40,10 @@ app.post('/', async (c) => {
             return c.json({error: "Message is too long"}, { status: 413 })
         }
 
-
+        message = message
+            .split(/\s/)
+            .filter((word) => !WHITELIST.includes(word.toLowerCase()))
+            .join(' ')
 
     } catch (err) {
 
