@@ -2,6 +2,8 @@ import { Hono } from "hono";
 import { env } from "hono/adapter";
 import { cors } from "hono/cors";
 
+import { Index } from "@upstash/vector";
+
 const app = new Hono()
 
 type Environment = {
@@ -18,6 +20,14 @@ app.post('/', async (c) => {
 
     try {
         const { VECTOR_TOKEN, VECTOR_URL} = env<Environment>(c)
+
+        const index = new Index({
+            url: VECTOR_URL,
+            token: VECTOR_TOKEN,
+            cache: false,
+        })
+
+        
     } catch (err) {
 
     }
