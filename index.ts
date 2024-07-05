@@ -4,6 +4,11 @@ import { cors } from "hono/cors";
 
 const app = new Hono()
 
+type Environment = {
+    VECTOR_URL: string 
+    VECTOR_TOKEN: string
+}
+
 app.use(cors())
 
 app.post('/', async (c) => {
@@ -12,7 +17,7 @@ app.post('/', async (c) => {
     }
 
     try {
-        const {} = env(c)
+        const { VECTOR_TOKEN, VECTOR_URL} = env<Environment>(c)
     } catch (err) {
 
     }
