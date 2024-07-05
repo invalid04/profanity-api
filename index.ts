@@ -45,7 +45,15 @@ app.post('/', async (c) => {
             .filter((word) => !WHITELIST.includes(word.toLowerCase()))
             .join(' ')
 
+        const [] = await Promise.all([
+            splitTextIntoWords(message)
+        ])
+
     } catch (err) {
 
     }
 })
+
+function splitTextIntoWords(text: string) {
+    return text.split(/\s/)
+}
