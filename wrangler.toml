@@ -1,0 +1,6 @@
+name = "profanity-api"
+compatibility_date = "2024-07-5"
+
+[vars]
+VECTOR_URL = "https://enabling-troll-17732-us1-vector.upstash.io"
+VECTOR_TOKEN = "ABgFMGVuYWJsaW5nLXRyb2xsLTE3NzMyLXVzMWFkbWluTURZeE1EYzRNVEF0TlRKbE5pMDBZemxpTFRrNFl6TXRaVEl4T0daaU1XWXdNVGRr"
