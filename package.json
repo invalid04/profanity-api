@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
-    "tsx": "^4.16.2"
+    "tsx": "^4.16.2",
+    "wrangler": "^3.63.2"
   }
 }

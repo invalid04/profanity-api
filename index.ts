@@ -132,3 +132,5 @@ async function splitTextIntoSemantics(text: string) {
     const chunks = documents.map((chunk) => chunk.pageContent)
     return chunks
 }
+
+export default app
