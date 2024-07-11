@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 
 import { Index } from "@upstash/vector";
 
+
 const app = new Hono()
 
 type Environment = {
@@ -47,6 +48,7 @@ app.post('/', async (c) => {
 
         const [] = await Promise.all([
             splitTextIntoWords(message)
+            splitTextIntoSemantics(message)
         ])
 
     } catch (err) {
@@ -56,4 +58,9 @@ app.post('/', async (c) => {
 
 function splitTextIntoWords(text: string) {
     return text.split(/\s/)
+}
+
+async function splitTextIntoSemantics(text: string) {
+    if(text.split(/\s/).length === 1) return []
+
 }
