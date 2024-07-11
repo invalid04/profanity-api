@@ -4,6 +4,13 @@ import { cors } from "hono/cors";
 
 import { Index } from "@upstash/vector";
 
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+
+const semanticSplitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 25,
+    separators: [' '],
+    chunkOverlap: 12
+})
 
 const app = new Hono()
 
