@@ -22,6 +22,7 @@ type Environment = {
 app.use(cors())
 
 const WHITELIST = ['swear']
+const PROFANITY_THRESHOLD = 0.86
 
 app.post('/', async (c) => {
     if (c.req.header('Content-Type') !== 'application/json') {
@@ -53,13 +54,71 @@ app.post('/', async (c) => {
             .filter((word) => !WHITELIST.includes(word.toLowerCase()))
             .join(' ')
 
-        const [] = await Promise.all([
+        const [semanticChunks, wordChunks] = await Promise.all([
+            splitTextIntoSemantics(message),
             splitTextIntoWords(message)
-            splitTextIntoSemantics(message)
         ])
 
-    } catch (err) {
+        const flaggedFor = new Set<{score: number, text: string}>()
 
+        const vectorRes = await Promise.all([
+            ...wordChunks.map(async (wordChunk) => {
+                const [vector] = await index.query({
+                    topK: 1,
+                    data: wordChunk,
+                    includeMetadata: true
+                })
+
+                if(vector && vector.score > PROFANITY_THRESHOLD) {
+                    flaggedFor.add({
+                        text: vector.metadata!.text as string,
+                        score: vector.score,
+                    })
+                }
+                return vector!
+            }),
+            ...semanticChunks.map(async (semanticChunk) => {
+                const [vector] = await index.query({
+                    topK: 1,
+                    data: semanticChunk,
+                    includeMetadata: true
+                })
+
+                if(vector && vector.score > 0.95) {
+                    flaggedFor.add({
+                        text: vector.metadata!.text as string,
+                        score: vector.score,
+                    })
+                }
+                return vector!
+            })
+        ])
+
+        if (flaggedFor.size > 0) {
+            const sorted = Array.from(flaggedFor).sort((a, b) => a.score > b.score ? -1 : 1)[0]
+    
+            return c.json({
+                isProfanity: true,
+                score: sorted.score,
+                flaggedFor: sorted.text,
+            })
+        } else {
+            const mostProfaneChunk = vectorRes.sort((a, b) => a.score > b.score ? -1 : 1)[0]
+            return c.json({
+                isProfanity: false,
+                score: mostProfaneChunk.score,
+            })
+        }
+
+    } catch (err) {
+        console.error(err)
+
+        return c.json(
+            {
+                error: 'something went wrong', 
+            },
+            { status: 500}
+        )
     }
 })
 
